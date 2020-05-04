@@ -2,11 +2,13 @@ map_15d <- function(i){
   table15d <-  table_places %>% filter(リリース日 >= start_date + i - 15 & リリース日 <= start_date + i)
   hok_map %>% ggplot(aes(long, lat)) +
     geom_polygon(fill = "white", colour = "grey50") +
-    xlim(139, 146.5) +
-    ylim(40.5, 46.5) +
+    xlim(139.2, 146.3) +
+    ylim(40.7, 46.3) +
     coord_quickmap() +
-    geom_jitter(data = table15d, aes(x = long, y = lat, color = 性別), width = 0.2, height = 0.2, alpha = 0.3) +
-    scale_color_manual(values = c("Red", "Blue"), limits = c("女性", "男性"))
+    geom_jitter(data = table15d, aes(x = long, y = lat, colour = 性別), width = 0.1, height = 0.1, shape = 6, alpha = 0.5, size = 1.5) +
+    scale_color_discrete("", limits = c("女性", "男性", NA)) +
+    geom_text(data = ext_hok, aes(x = long, y = lat, label = location)) +
+    theme_void()
 }
 for (i in count_days) {
   #for (i in 95) {  
