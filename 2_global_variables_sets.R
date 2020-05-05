@@ -1,4 +1,4 @@
-#variables, subsets that will be used by functions
+#variables, subsets that will be used by functions 3 and 4
 start_date <- ymd("2020-01-28")
 count_days <- 0:as.numeric(ymd(max(ch$リリース日)) - start_date)
 
@@ -21,7 +21,7 @@ hok_map <- map_data("world2", "Japan") %>% filter(subregion == "Hokkaido")
 places_coord <- read_csv("Data/places_coord.csv")
 places_coord <- places_coord %>% mutate(place = str_sub(Place, end = 2)) %>%
   select(place, long, lat) %>% add_row(place = NA, long = 145, lat = 45)
-ext_hok <- tibble(location = c("中国", "都府県", "NA"), long = c(140, 145, 145), lat = c(45.5, 41.5, 45.5))
+ext_hok <- tibble(location = c("中国←", "↓都府県", "NA"), long = c(140, 145, 145), lat = c(45.5, 41.5, 45.5))
 table_places <- ch %>% select(リリース日, 性別, 年代, 居住地)%>%
   mutate(place = str_sub(居住地, end = 2)) %>%
   left_join(., places_coord, by = "place") %>%
