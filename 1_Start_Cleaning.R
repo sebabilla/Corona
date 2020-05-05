@@ -1,19 +1,11 @@
 #libraries
-library(dplyr)
-library(tidyr)
-library(ggplot2)
-library(lubridate)
-library(hms)
-library(readr)
-library(purrr)
-library(broom)
-library(stringr)
-library(tibble)
-library(forcats)
+library(dplyr);library(tidyr);library(ggplot2);library(lubridate);library(hms)
+library(readr);library(purrr);library(broom);library(stringr);library(tibble)
+library(forcats);library(gridExtra)
 
 #downloaded filed is in Shift_JIS! Convert it in UTF_8 with Libreoffice Calc (or Excel) before putting it in the directory /Images  
 ch <- read_csv("Data/patients2.csv")
-#cleaning
+#cleaning and make table for graphs 3, 4 and 5 
 ch <- ch %>% mutate_if(is.character, str_replace_all, pattern = "０", replacement = "0") %>%
   mutate_if(is.character, str_replace_all, pattern = "１", replacement = "1") %>%
   mutate_if(is.character, str_replace_all, pattern = "２", replacement = "2") %>%
@@ -29,3 +21,9 @@ ch <- ch %>% mutate_if(is.character, str_replace_all, pattern = "０", replaceme
   mutate_if(is.character, str_replace_all, pattern = "非公表", replacement = "NA") %>%
   mutate_if(is.character, str_replace_all, pattern = "^－$", replacement = "NA") %>%
   mutate_if(is.character, ~replace(., . == "NA", NA))
+
+#file about patients'state, used to count bad news, this file too needs to be converted before import
+death <- read_csv("Data/covid19_data2.csv")
+death <- death %>% select(年, 月, 日, 日死亡数, 死亡累計) %>% 
+  unite("date", 年, 月, 日, sep = "-") %>%
+  mutate(date = ymd(date))
