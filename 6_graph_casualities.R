@@ -25,16 +25,3 @@ graph_casuality <- function(i){
           axis.title = element_blank(),
           axis.ticks = element_blank())
 }
-
-
-for (i in count_days) {
-  #for (i in max(count_days)) {  
-  g4 <- graph_casuality(i)
-  filename <- ifelse(i<10, 
-                     paste("Images/graph00", i, ".png", sep = ""), 
-                     ifelse(i<100, 
-                            paste("Images/graph0", i, ".png", sep = ""), 
-                            paste("Images/graph", i, ".png", sep = "")))
-  ggsave(filename, plot = g4, width = 5, height = 5, units = "cm")
-  print(i)
-}
