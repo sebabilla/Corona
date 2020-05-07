@@ -19,7 +19,7 @@ jobmax_12 <- ch %>% select(属性) %>%
 #tibble for function map_15d
 hok_map <- map_data("world2", "Japan") %>% filter(subregion == "Hokkaido")
 places_coord <- read_csv("Data/places_coord.csv")
-places_coord <- places_coord %>% mutate(place = str_sub(Place, end = 2)) %>%
+places_coord <- places_coord %>% mutate(place = str_sub(place, end = 2)) %>%
   select(place, long, lat) %>% add_row(place = NA, long = 145, lat = 45)
 ext_hok <- tibble(location = c("中国←", "↓都府県", "NA"), long = c(140, 145, 145), lat = c(45.5, 41.5, 45.5))
 table_places <- ch %>% select(リリース日, 性別, 年代, 居住地)%>%
