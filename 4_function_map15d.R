@@ -1,8 +1,10 @@
+# draw the map of patients distribution in Hokkaido
 map_15d <- function(i){ 
   table15d <-  table_places %>% 
     filter(リリース日 >= start_date + i - 15 & リリース日 <= start_date + i) %>%
     group_by(place) %>% mutate(n = n()) %>%
     ungroup()
+  #for readability purpose, the movement and intensity of people will differ depending on the nuber of cases in one place 
   table15d1 <- table15d %>% filter(n==1)
   table15d10 <- table15d %>% filter(n>1 & n<=10)
   table15dx <- table15d %>% filter(n>10)

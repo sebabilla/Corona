@@ -1,9 +1,10 @@
+#limits of the graph
 maxd <- max(death$死亡累計)
 nrows <- ceiling(sqrt(maxd))
 death2 <- death %>% mutate(red = 日死亡数, grey = 死亡累計 - 日死亡数, white = nrows^2 - 死亡累計) %>%
   select(grey, red, white)
-  
-#function
+
+#function at t = i
 graph_casuality <- function(i){
   j=1+i
   vgrey <- rep(1, death2$grey[j], length.out = NA)
