@@ -1,14 +1,16 @@
-#function for doing graph of sex, age, job at t+i
+#function for doing graph of sex, age, job at t+i for february (no good info on patients' state)
 graph_sex_job_age <- function(i){
   daily_table <- table_sex_job_age %>% filter(リリース日 <= start_date + i)
+  
+  # selecting the info for the legend
   daily_job <- daily_table %>%
-    select(属性) %>% 
-    mutate(job = str_sub(属性, end = 2)) %>%
+    select(属性) %>% mutate(job = str_sub(属性, end = 2)) %>%
     group_by(job) %>%
-    summarize(n = n()) %>% 
-    arrange(desc(n)) %>%
+    summarize(n = n()) %>% arrange(desc(n)) %>%
     left_join(jobmax_12, .)
   legend <- daily_job %>% unite("legend", job, n, sep = " ") %>% pull(legend)
+  
+  #defining the graph, output of the function
   daily_table %>% select(-n) %>%
     left_join(. , daily_job, by = "job") %>% 
     unite("daily_job", job, n, sep = " ") %>%

@@ -14,16 +14,19 @@ calclogRot <- function(N, tau){
   logRot
 }
 
-#calculate log(Ro(t)) 
-timetable <- ch %>% select(リリース日) %>% group_by(リリース日) %>% 
+#calculate log(Ro(t)), it is done once before entering the for loop of graph generation
+timetable <- patients %>% select(リリース日) %>% group_by(リリース日) %>% 
   summarize(n = n()) %>% mutate(リリース日 = ymd(リリース日))
 timetable <- tibble(リリース日 = count_days + start_date) %>% 
   left_join(. , timetable) %>%
   mutate(n = ifelse(is.na(n), 0.01, n)) %>%
   mutate(logRo = calclogRot(n, 7))
-max_n <- max(timetable$n)
-timelimits <- c(start_date - 2, start_date + max(count_days) + 2)
 
+#size variables for or the graph daily_v
+max_n <- max(timetable$n)
+timelimits <- c(start_date - 1, start_date + max(count_days) + 1)
+
+#function to generate the graph at t = i
 graph_daily_v <- function(i){
   dailyv <- timetable %>% filter(リリース日 <= start_date + i)
   logRo <- last(dailyv$logRo)
