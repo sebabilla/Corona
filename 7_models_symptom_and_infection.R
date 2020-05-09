@@ -45,11 +45,15 @@ infected2 <- infected %>% filter(!is.na(symptom)) %>%
   group_by(place) %>% mutate(n=(n())) %>% filter(n>1) %>% ungroup() %>%
   mutate(output = symptom) %>% select(-infected, -symptom)
 #2. may need to be run several times to not have errors
+###!!!!
 patientsbestmodel <- sapply(1:20, bestglm, infected2)
-patientsbestmodel #not the list nuber of the best fit, put it in the line below to uncomment them 
-patss <- tibble(class = names(patientsbestmodel[[12]][[1]]), value = signif(patientsbestmodel[[12]][[1]], digit = 3))
-patconfmat <- as_tibble(patientsbestmodel[[12]][[2]]) %>% rename(Pred = Prediction, Ref = Reference)
-patcoef<- patientsbestmodel[[12]][[3]] %>% mutate(category = str_sub(category, -10), estimate = signif(estimate, digits = 2), p = signif(p, digits = 2)) %>% rename("p<.05" = p, βhat = estimate)
+###!!!!
+#3. extract the model with best sensibility (that's the wickness here)
+patientsbestmodel <- patientsbestmodel %>% discard(is.null) #not the list nuber of the best fit, put it in the line below to uncomment them 
+maxsensitivity <- which.max(lapply(1:length(patientsbestmodel), function(x) patientsbestmodel[[x]][[1]][1]))
+patss <- tibble(class = names(patientsbestmodel[[maxsensitivity]][[1]]), value = signif(patientsbestmodel[[maxsensitivity]][[1]], digit = 3))
+patconfmat <- as_tibble(patientsbestmodel[[maxsensitivity]][[2]]) %>% rename(Pred = Prediction, Ref = Reference)
+patcoef<- patientsbestmodel[[maxsensitivity]][[3]] %>% mutate(category = str_sub(category, -10), estimate = signif(estimate, digits = 2), p = signif(p, digits = 2)) %>% rename("p<.05" = p, βhat = estimate)
 patientsfit_grob <- grid.arrange(
   tableGrob(patss, rows = NULL, theme = ttheme_minimal(colhead=list(bg_params = list(col="black")))),
   tableGrob(patconfmat, rows = NULL, theme = ttheme_minimal(colhead=list(bg_params = list(col="black")))),
@@ -84,15 +88,14 @@ infected3 <- infected %>% add_row(not_infected) %>%
   arrange(date) %>% mutate(age = as.numeric(age), output = as.factor(infected)) %>%
   group_by(place) %>% mutate(n=n()) %>% filter(n>1) %>% (ungroup)
 #4. give it to the model, may need to be run several times to not have errors
+###!!!
 infectedbestmodel <- sapply(1:20, bestglm, infected3)
-infectedbestmodel #not the list nuber of the best fit, put it in the line below to uncomment them 
-for (x in 1:20) { #not the list nuber of the best fit of specificity, put it in the lines below to uncomment them 
-  print(x)
-  print(infectedbestmodel[,x][[1]])
-}
-infss <- tibble(class = names(infectedbestmodel[,8][[1]]), value = signif(infectedbestmodel[,8][[1]], digit = 3))
-infconfmat <- as_tibble(infectedbestmodel[,8][[2]]) %>% rename(Pred = Prediction, Ref = Reference)
-infcoef<- infectedbestmodel[,8][[3]] %>% mutate(category = str_sub(category, -10), estimate = signif(estimate, digits = 2), p = signif(p, digits = 2)) %>% filter(estimate>0) %>% rename("p<.05" = p, βhat = estimate)
+###!!!
+#5. extract the model with best specificity (that's the wickness here)
+maxspecificity <- which.max(lapply(1:20, function(x) infectedbestmodel[,x][[1]][2]))
+infss <- tibble(class = names(infectedbestmodel[,maxspecificity][[1]]), value = signif(infectedbestmodel[,maxspecificity][[1]], digit = 3))
+infconfmat <- as_tibble(infectedbestmodel[,maxspecificity][[2]]) %>% rename(Pred = Prediction, Ref = Reference)
+infcoef<- infectedbestmodel[,maxspecificity][[3]] %>% mutate(category = str_sub(category, -10), estimate = signif(estimate, digits = 2), p = signif(p, digits = 2)) %>% filter(estimate>0) %>% rename("p<.05" = p, βhat = estimate)
 inffit_grob <- grid.arrange(
   tableGrob(infss, rows = NULL, theme = ttheme_minimal(colhead=list(bg_params = list(col="black")))),
   tableGrob(infconfmat, rows = NULL, theme = ttheme_minimal(colhead=list(bg_params = list(col="black")))),

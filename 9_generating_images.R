@@ -14,15 +14,15 @@ textmodel2 <- grid.arrange(text_grob("モデルコーナ  モデル②", face = 
 #Conclusion
 textconclusion <- grid.arrange(text_grob(" 結論  持っている情報の上では\n(症状｜状態)が全然推測できますんが、(感染｜状態)が少し推測できます。\nもちろん人々の様子・関係により、その可能は非常に変更すると思います。", face = "bold", color="darkblue"),
                            text_grob("この動画はただの学生の遊びだけですね。"),
-                           text_grob("made by Sébastien Abilla, 博士課程2年製\n北海道オーペンデータポータル(2020)新型コロナウイルス感染症に関するデータ\n総務省統計局（2017）など総合政策部（2019）、Wikipedia"), layout_matrix = rbind(c(1),c(1), c(1), c(2), c(3), c(3)),ncol = 1)
+                           text_grob("made by Sébastien Abilla, 博士課程2年製\n北海道オーペンデータポータル(2020)新型コロナウイルス感染症に関するデータ\n総務省統計局(2017)、総合政策部(2019)、Irizarry(2020)、Wikipedia、..."), layout_matrix = rbind(c(1),c(1), c(1), c(2), c(3), c(3)),ncol = 1)
 
 
 
 #grouping all the graphs in one, making on image per day, export it
-#for (i in count_days) {
-for (i in max(count_days)) {  
+for (i in count_days) {
+#for (i in max(count_days)) {  
     gr_date <- start_date + i
-    title <- paste("北海道におけるコロナウイルスの普及    ", year(gr_date), "年", month(gr_date), "月", day(gr_date), "日まで", sep = "")
+    title <- paste("北海道における新型コロナウイルス感染症の普及    ", year(gr_date), "年", month(gr_date), "月", day(gr_date), "日まで", sep = "")
     g1 <- graph_sex_job_age(i)
     g2 <- map_15d(i)
     g3 <- graph_daily_v(i)
