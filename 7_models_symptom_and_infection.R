@@ -52,7 +52,7 @@ patientsbestmodel <- sapply(1:20, bestglm, infected2)
 patientsbestmodel <- patientsbestmodel %>% discard(is.null) #not the list nuber of the best fit, put it in the line below to uncomment them 
 maxsensitivity <- which.max(lapply(1:length(patientsbestmodel), function(x) patientsbestmodel[[x]][[1]][1]))
 patss <- tibble(class = names(patientsbestmodel[[maxsensitivity]][[1]]), value = signif(patientsbestmodel[[maxsensitivity]][[1]], digit = 3))
-patconfmat <- as_tibble(patientsbestmodel[[maxsensitivity]][[2]]) %>% rename(Pred = Prediction, Ref = Reference)
+patconfmat <- as_tibble(patientsbestmodel[[maxsensitivity]][[2]]) %>% rename(predict = Prediction, ref = Reference)
 patcoef<- patientsbestmodel[[maxsensitivity]][[3]] %>% mutate(category = str_sub(category, -10), estimate = signif(estimate, digits = 2), p = signif(p, digits = 2)) %>% rename("p<.05" = p, βhat = estimate)
 patientsfit_grob <- grid.arrange(
   tableGrob(patss, rows = NULL, theme = ttheme_minimal(colhead=list(bg_params = list(col="black")))),
