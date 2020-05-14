@@ -50,3 +50,6 @@ death <- death %>% select(年, 月, 日, 日死亡数, 死亡累計) %>%
 #file with localisation (from wikipaedia) and population (from http://www.pref.hokkaido.lg.jp/ss/tuk/900brr/index2.htm)) for cities in Hokkaido
 #other locations are aritrary set to be on the edge of the map
 places <- read_csv("Data/places_coord.csv")
+
+#check that no new towns have been infected (would need to be add in places_coord.csv)
+patients %>% group_by(居住地) %>% summarize(n=n()) %>% mutate(place = 居住地) %>% left_join(.,places) %>% filter(is.na(population))
