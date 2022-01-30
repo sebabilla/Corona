@@ -34,8 +34,8 @@ graph_daily_v <- function(i){
   signRo <- ifelse(logRo > 0, "red3", "green4")
   dailyv %>% ggplot(aes(リリース日, n)) + 
     geom_col(fill = "blue4") +
-    geom_text(aes(x=start_date + 20, y = 38, label = "基本再生産数"), col = "black", fontface = "plain", size = 3) +
-    geom_text(aes(x=start_date + 20, y = 30, label = labelRo), col = signRo, fontface = "plain", family = "serif", size = 4) +
+    geom_text(aes(x=start_date + 50, y = 115, label = "基本再生産数"), col = "black", fontface = "plain", size = 3) +
+    geom_text(aes(x=start_date + 50, y = 80, label = labelRo), col = signRo, fontface = "plain", family = "serif", size = 4) +
     scale_x_date(date_labels = "%m", limits = timelimits) +
     ylim(0, max_n) +
     ylab("人数") +

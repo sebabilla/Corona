@@ -7,7 +7,10 @@ library(forcats);library(gridExtra);library(caret);library(ggpubr)
 patients <- read_csv("Data/patients2.csv") # https://www.harp.lg.jp/opendata/dataset/1369.html
 #cleaning and make table for graphs 3, 4 and 5
 # 1. removing japanese numbers
-patients <- patients %>% mutate_if(is.character, str_replace_all, pattern = "０", replacement = "0") %>%
+patients <- patients %>% 
+  filter(!居住地 %in% c("調査中", "重複削除")) %>%
+  filter(!is.na(居住地 )) %>%
+  mutate_if(is.character, str_replace_all, pattern = "０", replacement = "0") %>%
   mutate_if(is.character, str_replace_all, pattern = "１", replacement = "1") %>%
   mutate_if(is.character, str_replace_all, pattern = "２", replacement = "2") %>%
   mutate_if(is.character, str_replace_all, pattern = "３", replacement = "3") %>%
@@ -35,7 +38,10 @@ patients <- patients %>% mutate_if(is.character, str_replace_all, pattern = "０
                                                                                                ifelse(居住地 == "根室振興局管内", "根室市", 
                                                                                                          ifelse(居住地 %in% c("石狩振興局内", "石狩振興局管内"), "石狩市", 
                                                                                                                    ifelse(居住地 %in% c("釧路総合振興局管内", "釧路総合振興局内"), "釧路市", 
-                                                                                                                             ifelse(居住地 == "留萌振興局管内", "留萌市", 居住地))))))))))))) %>%
+                                                                                                                             ifelse(居住地 == "留萌振興局管内", "留萌市",
+                                                                                                                                       ifelse(居住地 == "檜山振興局管内", "江差町",
+                                                                                                                                                 ifelse(居住地 == "日高振興局管内", "浦河町",  
+                                                                                                                                                 ifelse(str_detect(居住地, "県$") == TRUE, "東京都", 居住地)))))))))))))))) %>%
   # 4. Keep only 2 states for people posityves, symptomatic or asymptomatique, big biais as test are not systematique, before March no info = NA, after no  info = asyptomatic as the data seems more consistent
   mutate(備考 = ifelse(is.na(備考) & month(リリース日) >= 3, "無", 備考)) %>% mutate(備考 = ifelse(!is.na(備考), str_sub(備考, end = 1), NA)) %>% mutate(備考 = ifelse(備考 == "無", "無症", ifelse(!is.na(備考), "有症", NA))) %>%
   mutate(リリース日 = ymd(リリース日)) %>%
@@ -52,4 +58,4 @@ death <- death %>% select(年, 月, 日, 日死亡数, 死亡累計) %>%
 places <- read_csv("Data/places_coord.csv")
 
 #check that no new towns have been infected (would need to be add in places_coord.csv)
-patients %>% group_by(居住地) %>% summarize(n=n()) %>% mutate(place = 居住地) %>% left_join(.,places) %>% filter(is.na(population))
+patients %>% group_by(居住地) %>% summarize(n=n()) %>% mutate(place = 居住地) %>% left_join(.,places) %>% filter(is.na(population)) %>% print(., n=nrow(.))

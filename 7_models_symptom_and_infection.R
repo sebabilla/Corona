@@ -101,3 +101,4 @@ inffit_grob <- grid.arrange(
   tableGrob(infconfmat, rows = NULL, theme = ttheme_minimal(colhead=list(bg_params = list(col="black")))),
   tableGrob(infcoef, rows = NULL, theme = ttheme_minimal(colhead=list(bg_params = list(col="black")))),
   nrow=1, layout_matrix = rbind(c(1,1,2,2,3,3,3)), top = "モデル②の結果　もちろん完璧ではありませんが、だれの状態が\nよりよい危険か安全だが少し言えます。ここでは危険な状態（β＞０）だけ見せます。")
+

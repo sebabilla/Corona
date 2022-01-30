@@ -6,7 +6,9 @@ count_days <- 0:as.numeric(ymd(max(patients$リリース日)) - start_date)
 
 # tibble for graph function graph_sex_job_age
 table_sex_job_age <- patients %>% select(リリース日, 性別, 属性, 年代, 備考)%>%
-  filter(!is.na(性別)) %>% 
+  mutate(性別 = ifelse(性別 == "男", "男性", 
+                       ifelse(性別 == "女", "女性", 性別))) %>%
+  filter(性別 %in% c("男性", "女性")) %>% 
   mutate(job = str_sub(属性, end = 2)) %>%
   group_by(job) %>% mutate(n = n()) %>%
   ungroup() %>%
