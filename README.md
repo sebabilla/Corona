@@ -1,8 +1,8 @@
-Animated data vizualization about the spread of Covid19 in Hokkaido
+### Animated data vizualization about the spread of Covid19 in Hokkaido
 
 by Sébastien Abilla
 
-The files are to be executed in order (1 to 7), before executing 9 to generate the images.
+The files are to be executed in order (1 to 7), before executing 9 to generate the images.  
 1. Import data and make a first non-specific cleaning
 2. Generates global variables and datasets used by several functions
 3. Function that generates a histogram age/sex/job of the patients
@@ -14,7 +14,7 @@ The files are to be executed in order (1 to 7), before executing 9 to generate t
 
 99. Code lines cemetery (that may be usefull)
 
-Data about patients from the opendata page of Hokkaido Government :
+Data about patients from the opendata page of Hokkaido Government :  
 https://www.harp.lg.jp/opendata/dataset/1369.html
 
 
